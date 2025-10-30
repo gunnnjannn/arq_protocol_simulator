@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GBN & SR Simulator v12</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="controls">
+        <button id="btn-start">▶ Start</button>
+        <button id="btn-pause">⏸ Pause</button>
+        <button id="btn-reset">⏹ Reset</button>
+        <div class="setting">
+            <label for="algo-select">Algorithm</label>
+            <select id="algo-select">
+                <option value="gbn" selected>Go-Back-N</option>
+                <option value="sr">Selective Repeat</option>
+            </select>
+        </div>
+        <div class="setting">
+            <label for="window-size">Window Size (N)</label>
+            <input id="window-size" type="number" value="4" min="2" max="10">
+        </div>
+        <div class="setting">
+            <label for="sim-speed">Animation Speed</label>
+            <input id="sim-speed" type="range" min="2" max="10" value="5">
+        </div>
+        
+        <div class="delete-group">
+            <button id="btn-delete-selected" disabled>Delete Selected</button>
+        </div>
+    </div>
+
+    <div class="simulation-area" id="sim-area">
+        <div class="node" id="sender">
+            <h3>Sender</h3>
+            <div class="window-info" id="sender-info">Base: 1, NextSeq: 1</div>
+            <div class="window-visual" id="sender-window-visual"></div>
+        </div>
+        <div class="node" id="receiver">
+            <h3>Receiver</h3>
+            <div class="window-info" id="receiver-info">Expected: 1</div>
+            <div class="window-display" id="receiver-buffer-display" style="height: 50px;">Buffer: [ ]</div>
+            <div class="window-display" id="receiver-log" style="height: 100px;"></div>
+        </div>
+    </div>
+
+    <div class="log-area" id="log-area">
+        <div>Welcome! Click Start to begin.</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

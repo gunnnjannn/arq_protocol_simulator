@@ -1,0 +1,140 @@
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: grid; grid-template-areas: "controls" "sim" "log"; grid-template-rows: auto 1fr auto; height: 100vh; margin: 0; overflow: hidden; background-color: #f4f7f6; }
+
+/* 1. Controls Area */
+.controls { grid-area: controls; background: #fff; border-bottom: 2px solid #ddd; padding: 10px; display: flex; flex-wrap: wrap; gap: 15px; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.controls button { font-size: 14px; padding: 8px 12px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; transition: all 0.2s ease; }
+.controls button:active { transform: scale(0.95); }
+#btn-start { background-color: #28a745; color: white; }
+#btn-pause { background-color: #ffc107; color: #333; }
+#btn-reset { background-color: #dc3545; color: white; }
+.controls .setting { display: flex; flex-direction: column; }
+.controls .setting label { font-size: 11px; color: #555; margin-bottom: 4px; }
+.controls .setting select, .controls .setting input { font-size: 14px; border-radius: 4px; border: 1px solid #ccc; padding: 4px; }
+
+/* UPDATED: Delete Packet controls */
+.delete-group { margin-left: 20px; border-left: 2px solid #eee; padding-left: 20px; }
+#btn-delete-selected { background-color: #6c757d; color: white; }
+#btn-delete-selected:disabled { background-color: #ccc; }
+
+/* 2. Simulation Area */
+.simulation-area { 
+    grid-area: sim; 
+    position: relative; 
+    width: 100%; 
+    overflow: hidden; 
+    background: linear-gradient(to right, #eef 0%, #fff 10%, #fff 90%, #efe 100%);
+}
+.node { position: absolute; top: 50px; width: 200px; height: 350px; background: #fff; border: 2px solid #aaa; border-radius: 8px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+#sender { left: 20px; }
+#receiver { right: 20px; }
+.node h3 { text-align: center; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+.window-info { font-size: 13px; margin-bottom: 10px; font-family: "Courier New", Courier, monospace; }
+
+/* Sliding Window visual */
+.window-visual {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    margin: 15px 0;
+    overflow-x: auto;
+    padding-bottom: 5px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+}
+.window-visual .seq-box {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    background: #f0f0f0;
+    color: #888;
+    margin-left: -1px; /* Overlap borders */
+}
+.window-visual .in-window {
+    border: 2px solid #007bff;
+    background: #e0f7ff;
+    color: #0056b3;
+    z-index: 1;
+}
+.window-visual .sent {
+    background: #fff3cd;
+    color: #856404;
+}
+.window-visual .acked {
+    background: #d4edda;
+    color: #155724;
+    opacity: 0.6;
+}
+
+.window-display { background: #f9f9f9; border: 1px solid #eee; padding: 5px; height: 150px; overflow-y: auto; font-size: 12px; }
+#receiver-buffer-display { height: 50px; }
+#receiver-log { height: 100px; }
+
+/* Packets and Animations */
+@keyframes fly-right {
+    from { left: 230px; transform: scale(1); opacity: 1; }
+    to { left: calc(100% - 270px); transform: scale(0.8); opacity: 0.8; }
+}
+@keyframes fly-left {
+    from { left: calc(100% - 270px); transform: scale(0.8); }
+    to { left: 230px; transform: scale(1); }
+}
+.packet, .ack {
+    position: absolute;
+    width: 40px;
+    height: 30px;
+    font-size: 12px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    border: 1px solid;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    animation-duration: 5s; 
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+    animation-play-state: running; 
+    cursor: default; /* Clicks only allowed when paused */
+    transition: transform 0.2s ease, border 0.2s ease;
+}
+.packet {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+    top: 100px;
+    animation-name: fly-right;
+}
+.ack {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+    top: 150px;
+    animation-name: fly-left;
+}
+.packet.lost, .ack.lost {
+    opacity: 0.5;
+    background: #f8d7da;
+    border-color: #f5c6cb;
+    transition: all 0.3s ease;
+}
+
+/* NEW: Selected class */
+.selected {
+    border: 3px solid #e67e22 !important;
+    transform: scale(1.1);
+}
+
+/* 3. Log Area */
+.log-area { grid-area: log; height: 150px; background: #333; color: #eee; font-family: "Courier New", Courier, monospace; font-size: 13px; overflow-y: scroll; padding: 10px; }
+.log-area div { margin-bottom: 5px; }
+.log-area .sender { color: #87cefa; }
+.log-area .receiver { color: #90ee90; }
+.log-area .network { color: #ffc107; }
+.log-area .error { color: #dc3545; font-weight: bold; }
